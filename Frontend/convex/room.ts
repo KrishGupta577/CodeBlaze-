@@ -92,9 +92,14 @@ export const getRoom = query({
             return null; // Room not found
         }
 
+        // Fixed: Don't return empty object, return undefined/null if host is missing
+        if (!room.host || !room.host.userId || !room.host.name) {
+            return null; // Return null if host data is incomplete
+        }
+
         return {
             roomId: room.roomId,
-            host: room.host || {},
+            host: room.host, // Now this will always have the proper structure
             participants: room.participants || [],
             code: room.code,
             isLive: room.isLive,

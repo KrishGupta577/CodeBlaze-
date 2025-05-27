@@ -21,6 +21,14 @@ interface Participant {
     isHost?: boolean;
 }
 
+interface Room {
+    host: {  // Now required since query returns null if host is missing
+        userId: string;
+        name: string;
+    };
+    participants?: Participant[];
+}
+
 const SidePanel: React.FC<SidePanelProps> = ({ isOpen, setIsOpen }) => {
     const [selectedUser, setSelectedUser] = useState<string | null>(null);
     const [showPopup, setShowPopup] = useState(false);
@@ -30,7 +38,6 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, setIsOpen }) => {
     const roomId = Array.isArray(params.roomId) ? params.roomId[0] : params.roomId ?? "";
     const { userId } = useAuth();
     const getRoom = useQuery(api.room.getRoom, { roomId });
-    const socketRef = useRef<Socket<DefaultEventsMap, DefaultEventsMap> | null>(null);
 
     useEffect(() => {
         if (getRoom?.participants) {
@@ -42,16 +49,20 @@ const SidePanel: React.FC<SidePanelProps> = ({ isOpen, setIsOpen }) => {
             setParticipants(formattedParticipants);
         }
 
+        // Fixed: Now we can safely access host.userId since query guarantees it exists
         if (getRoom?.host.userId === userId) {
             setIsHost(true);
+        } else {
+            setIsHost(false); // Reset isHost when conditions aren't met
         }
-    }, [getRoom]);
+    }, [getRoom, userId]);
 
     const disconnectParticipant = async (userId: string) => {
-
+        // Implementation needed
     }
 
-    if (!getRoom || !getRoom.host) {
+    // Loading condition - query returns null if room doesn't exist or host is incomplete
+    if (!getRoom) {
         return (
             <div className="flex flex-col items-center justify-center h-screen gap-4">
                 <div className="w-10 h-10 border-4 border-t-transparent border-blue-500 rounded-full animate-spin"></div>
