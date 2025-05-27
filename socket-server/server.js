@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
 
 
 // Health check endpoint
-app.get('/health', (req, res) => {
+app.get('/', (req, res) => {
     res.status(200).send('Socket server is running');
 });
 
