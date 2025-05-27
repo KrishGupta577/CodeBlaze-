@@ -1,6 +1,5 @@
 import { currentUser } from "@clerk/nextjs/server";
 import { ConvexHttpClient } from "convex/browser";
-import { api } from "../../../convex/_generated/api";
 import ProPlanView from "./_components/ProPlanView";
 import NavigationHeader from "@/components/NavigationHeader";
 import { ENTERPRISE_FEATURES, FEATURES } from "./_constants";
@@ -10,6 +9,7 @@ import FeatureCategory from "./_components/FeatureCategory";
 import FeatureItem from "./_components/FeatureItem";
 import LoginButton from "@/components/LoginButton";
 import UpgradeButton from "./_components/UpgradeButton";
+import { api } from "../../../../convex/_generated/api";
 
 async function PricingPage() {
     const user = await currentUser();
