@@ -19,7 +19,7 @@ import { useMutation } from "convex/react";
 import { api } from "../../../../../convex/_generated/api";
 
 interface JoinedEventData {
-  clients: any[];
+  clients: [];
   userId: string;
   socketId: string;
 }
